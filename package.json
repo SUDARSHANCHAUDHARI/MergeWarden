@@ -20,7 +20,7 @@
   "bin": {
     "mergewarden": "dist/src/cli.js"
   },
-  "files": ["dist/", "plugins/", "scripts/", "scheduler/", "config/", "docs/", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"],
+  "files": ["assets/", "dist/", "plugins/", "scripts/", "scheduler/", "config/", "docs/", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json --noEmit",
