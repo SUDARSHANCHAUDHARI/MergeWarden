@@ -11,6 +11,10 @@
   </array>
   <key>StartCalendarInterval</key>
   <dict><key>Hour</key><integer>__HOUR__</integer><key>Minute</key><integer>0</integer></dict>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
   <key>StandardOutPath</key><string>/Users/screencloudsudarshan/Library/Logs/MergeWarden/stdout.log</string>
   <key>StandardErrorPath</key><string>/Users/screencloudsudarshan/Library/Logs/MergeWarden/stderr.log</string>
 </dict>
