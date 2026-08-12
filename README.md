@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/mergewarden-logo.png" alt="MergeWarden logo" width="180">
+</p>
+
 <h1 align="center">MergeWarden</h1>
 
 <p align="center">
