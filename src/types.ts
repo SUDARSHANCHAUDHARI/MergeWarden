@@ -14,6 +14,9 @@ export interface ProfileConfig {
   mergeMethod: "merge" | "squash" | "rebase";
   riskThreshold: number;
   requireReview: boolean;
+  scheduledApply: boolean;
+  deleteBranchAfterMerge: boolean;
+  auditLogPath: string;
 }
 
 export interface PullRequestState {
@@ -23,6 +26,7 @@ export interface PullRequestState {
   headOid: string;
   isDraft: boolean;
   hasConflicts: boolean;
+  mergeStateKnown: boolean;
   checksKnown: boolean;
   checksPass: boolean;
   reviewsSatisfied: boolean;
@@ -35,4 +39,18 @@ export interface PullRequestState {
 export interface MergeDecision {
   eligible: boolean;
   blockers: string[];
+}
+
+export type AuditAction = "open" | "merge" | "scan";
+
+export interface AuditRecord {
+  timestamp: string;
+  profile: ProfileKind;
+  action: AuditAction;
+  repository: string;
+  target: string;
+  mode: "dry-run" | "apply";
+  decision: "allowed" | "blocked" | "completed" | "failed";
+  reasons: string[];
+  headOid?: string;
 }

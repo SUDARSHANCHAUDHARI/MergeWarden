@@ -16,7 +16,10 @@ const personal: ProfileConfig = {
   requireMergeApproval: false,
   mergeMethod: "squash",
   riskThreshold: 30,
-  requireReview: false
+  requireReview: false,
+  scheduledApply: false,
+  deleteBranchAfterMerge: false,
+  auditLogPath: ".mergewarden/audit.jsonl"
 };
 
 const safePullRequest: PullRequestState = {
@@ -26,6 +29,7 @@ const safePullRequest: PullRequestState = {
   headOid: "abc123",
   isDraft: false,
   hasConflicts: false,
+  mergeStateKnown: true,
   checksKnown: true,
   checksPass: true,
   reviewsSatisfied: true,
@@ -50,4 +54,10 @@ test("requires explicit approval for work merges", () => {
   const result = evaluateMerge(work, safePullRequest);
   assert.equal(result.eligible, false);
   assert.ok(result.blockers.includes("explicit merge approval is required"));
+});
+
+test("fails closed when merge state is unknown", () => {
+  const result = evaluateMerge(personal, { ...safePullRequest, mergeStateKnown: false });
+  assert.equal(result.eligible, false);
+  assert.ok(result.blockers.includes("merge state is unknown"));
 });

@@ -6,4 +6,8 @@ if [ "$#" -ne 2 ]; then
   exit 64
 fi
 
-exec node "$1" scan --config "$2" --apply
+scheduled_apply=$(node -e "const c=require(process.argv[1]); process.stdout.write(c.scheduledApply === true ? 'true' : 'false')" "$2")
+if [ "$scheduled_apply" = "true" ]; then
+  exec node "$1" scan --scheduled --apply --config "$2"
+fi
+exec node "$1" scan --scheduled --config "$2"

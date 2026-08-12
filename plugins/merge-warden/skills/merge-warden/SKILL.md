@@ -12,11 +12,11 @@ Run MergeWarden as a fail-closed GitHub housekeeping workflow. Treat reasoning a
 1. Resolve whether the active environment is the personal or work profile.
 2. Load its MergeWarden configuration.
 3. Verify the authenticated GitHub login, configured git email, repository remote, and repository allowlist.
-4. Run `mergewarden scan` without `--apply` and present the proposed actions and blockers.
+4. Run `mergewarden scan` or targeted `mergewarden check` and present the evidence and blockers.
 5. For PR creation, confirm the branch has unmerged commits, no equivalent open PR, a known base, passing configured verification, and no detected secrets.
 6. For merging, require a non-draft PR, passing known checks, satisfied reviews, no conflicts, no unresolved review blockers, a known acceptable risk score, and an unchanged head SHA.
 7. Require explicit approval for every work-profile merge. Permit personal-profile automatic merge only when configuration enables it and every gate passes.
-8. Re-evaluate immediately before mutation. Use `--apply` only after the applicable approval policy is satisfied.
+8. Re-evaluate immediately before a targeted mutation. Use `--apply` only on `open` or `merge` after the applicable approval policy is satisfied.
 9. Report actions and exact blockers without exposing credentials.
 
 ## Safety rules
@@ -34,7 +34,8 @@ Use the repository CLI with an explicit profile configuration:
 ```bash
 mergewarden status --config /path/to/mergewarden.config.json
 mergewarden scan --config /path/to/mergewarden.config.json
-mergewarden scan --config /path/to/mergewarden.config.json --apply
+mergewarden check --repo owner/repo --pr 42 --config /path/to/mergewarden.config.json
+mergewarden merge --repo owner/repo --pr 42 --apply --config /path/to/mergewarden.config.json
 ```
 
-Start with `status` when identity or profile selection is uncertain. Never add `--apply` merely because the user asked for a report.
+Start with `status` when identity or profile selection is uncertain. Manual scans never mutate. Preserve the source branch unless deletion is separately authorized.

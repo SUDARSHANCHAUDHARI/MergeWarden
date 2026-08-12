@@ -16,7 +16,10 @@ const config: ProfileConfig = {
   requireMergeApproval: false,
   mergeMethod: "squash",
   riskThreshold: 30,
-  requireReview: false
+  requireReview: false,
+  scheduledApply: false,
+  deleteBranchAfterMerge: false,
+  auditLogPath: ".mergewarden/audit.jsonl"
 };
 
 const pullRequest: GitHubPullRequest = {
@@ -47,6 +50,19 @@ test("does not treat a completed failed check as passing", () => {
     statusCheckRollup: [{ conclusion: "FAILURE", status: "COMPLETED" }]
   });
   assert.equal(state.checksPass, false);
+});
+
+test("does not treat a completed check without a conclusion as passing", () => {
+  const state = toPullRequestState(config, {
+    ...pullRequest,
+    statusCheckRollup: [{ status: "COMPLETED" }]
+  });
+  assert.equal(state.checksPass, false);
+});
+
+test("marks an unknown GitHub merge state as unknown", () => {
+  const state = toPullRequestState(config, { ...pullRequest, mergeStateStatus: "UNKNOWN" });
+  assert.equal(state.mergeStateKnown, false);
 });
 
 test("adds risk for sensitive paths", () => {

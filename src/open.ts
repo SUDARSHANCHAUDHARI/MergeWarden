@@ -20,17 +20,27 @@ async function repositoryPath(config: ProfileConfig, repository: string): Promis
   throw new Error(`No local checkout found for ${repository}.`);
 }
 
+function repositoryFromRemote(remote: string): string | undefined {
+  const normalized = remote.trim().replace(/\.git$/, "");
+  const match = normalized.match(/github\.com[/:]([^/]+\/[^/]+)$/i);
+  return match?.[1];
+}
+
 export async function openCandidatePullRequests(config: ProfileConfig, repository: string, apply: boolean): Promise<string[]> {
   const messages: string[] = [];
   const branches = config.candidateBranches[repository] ?? [];
   if (branches.length === 0) return messages;
   const cwd = await repositoryPath(config, repository);
   const remote = await run("git", ["remote", "get-url", "origin"], cwd);
-  if (!remote.toLowerCase().includes(repository.toLowerCase())) throw new Error(`${repository}: origin remote does not match.`);
+  if (repositoryFromRemote(remote)?.toLowerCase() !== repository.toLowerCase()) throw new Error(`${repository}: origin remote does not match.`);
+  const gitEmail = await run("git", ["config", "user.email"], cwd);
+  if (gitEmail !== config.gitEmail) throw new Error(`${repository}: git email does not match the active profile.`);
   const base = await defaultBranch(repository);
 
   for (const branch of branches) {
-    const ahead = Number(await run("git", ["rev-list", "--count", `${base}..${branch}`], cwd));
+    await run("git", ["fetch", "--quiet", "origin", base], cwd);
+    const remoteBase = `origin/${base}`;
+    const ahead = Number(await run("git", ["rev-list", "--count", `${remoteBase}..${branch}`], cwd));
     if (!Number.isFinite(ahead) || ahead <= 0) {
       messages.push(`${repository}:${branch}: blocked (no commits ahead of ${base})`);
       continue;
@@ -49,7 +59,7 @@ export async function openCandidatePullRequests(config: ProfileConfig, repositor
       if (!command) throw new Error(`${repository}: verification command cannot be empty.`);
       await run(command, args, cwd);
     }
-    const diff = await run("git", ["diff", `${base}...${branch}`], cwd);
+    const diff = await run("git", ["diff", `${remoteBase}...${branch}`], cwd);
     if (secretPattern.test(diff)) {
       messages.push(`${repository}:${branch}: blocked (possible secret in diff)`);
       continue;

@@ -1,15 +1,18 @@
 {
   "profile": "work",
-  "githubAccount": "sudarshan-screencloud",
-  "gitEmail": "sudarshan@screencloud.io",
-  "repositoryRoots": ["/Users/screencloudsudarshan/SCREENCLOUD_CODE"],
-  "repositoryAllowlist": [],
-  "candidateBranches": {},
-  "verificationCommands": {},
+  "githubAccount": "your-work-github-user",
+  "gitEmail": "you@company.example",
+  "repositoryRoots": ["/path/to/work/repos"],
+  "repositoryAllowlist": ["company/example"],
+  "candidateBranches": { "company/example": [] },
+  "verificationCommands": { "company/example": [["npm", "test"]] },
   "autoOpenPullRequests": true,
   "autoMergeLowRisk": true,
   "requireMergeApproval": true,
   "mergeMethod": "squash",
-  "riskThreshold": 30
-  ,"requireReview": true
+  "riskThreshold": 30,
+  "requireReview": true,
+  "scheduledApply": false,
+  "deleteBranchAfterMerge": false,
+  "auditLogPath": ".mergewarden/audit.jsonl"
 }

@@ -5,6 +5,7 @@ export function evaluateMerge(config: ProfileConfig, pr: PullRequestState): Merg
 
   if (pr.isDraft) blockers.push("pull request is a draft");
   if (pr.hasConflicts) blockers.push("merge conflicts are present");
+  if (!pr.mergeStateKnown) blockers.push("merge state is unknown");
   if (!pr.checksKnown) blockers.push("required check status is unknown");
   else if (!pr.checksPass) blockers.push("required checks are not passing");
   if (!pr.reviewsSatisfied) blockers.push("required reviews are not satisfied");
