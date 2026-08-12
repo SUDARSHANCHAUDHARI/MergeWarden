@@ -1,0 +1,4 @@
+interface:
+  display_name: "MergeWarden"
+  short_description: "Safely open, assess, and merge GitHub pull requests"
+  default_prompt: "Scan my configured repositories and report PR housekeeping actions."

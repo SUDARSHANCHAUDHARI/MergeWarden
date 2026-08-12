@@ -1,0 +1,15 @@
+{
+  "profile": "personal",
+  "githubAccount": "SUDARSHANCHAUDHARI",
+  "gitEmail": "sunny.sudarshan@gmail.com",
+  "repositoryRoots": ["/Users/screencloudsudarshan/SUDARSHAN_CODE/sudarshan_repos"],
+  "repositoryAllowlist": [],
+  "candidateBranches": {},
+  "verificationCommands": {},
+  "autoOpenPullRequests": true,
+  "autoMergeLowRisk": true,
+  "requireMergeApproval": false,
+  "mergeMethod": "squash",
+  "riskThreshold": 30
+  ,"requireReview": false
+}

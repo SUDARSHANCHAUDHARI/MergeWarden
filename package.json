@@ -1,0 +1,26 @@
+{
+  "name": "merge-warden",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Profile-aware GitHub PR housekeeping for Codex and Claude Code.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "mergewarden": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm build && node --test dist/**/*.test.js",
+    "validate:plugin": "python3 /Users/screencloudsudarshan/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/merge-warden",
+    "validate:skill": "python3 /Users/screencloudsudarshan/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/merge-warden/skills/merge-warden"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.7.2"
+  }
+}

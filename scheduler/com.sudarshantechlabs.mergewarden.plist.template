@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>__LABEL__</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__RUNNER__</string>
+    <string>__CLI__</string>
+    <string>__CONFIG__</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>__HOUR__</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>/Users/screencloudsudarshan/Library/Logs/MergeWarden/stdout.log</string>
+  <key>StandardErrorPath</key><string>/Users/screencloudsudarshan/Library/Logs/MergeWarden/stderr.log</string>
+</dict>
+</plist>

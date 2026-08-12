@@ -1,0 +1,15 @@
+{
+  "profile": "work",
+  "githubAccount": "sudarshan-screencloud",
+  "gitEmail": "sudarshan@screencloud.io",
+  "repositoryRoots": ["/Users/screencloudsudarshan/SCREENCLOUD_CODE"],
+  "repositoryAllowlist": [],
+  "candidateBranches": {},
+  "verificationCommands": {},
+  "autoOpenPullRequests": true,
+  "autoMergeLowRisk": true,
+  "requireMergeApproval": true,
+  "mergeMethod": "squash",
+  "riskThreshold": 30
+  ,"requireReview": true
+}

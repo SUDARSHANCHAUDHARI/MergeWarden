@@ -1,0 +1,9 @@
+{
+  "name": "merge-warden",
+  "version": "0.1.0",
+  "description": "Profile-aware GitHub PR housekeeping with fail-closed opening and merge policies.",
+  "author": {
+    "name": "SudarshanTechLabs",
+    "email": "sunny.sudarshan@gmail.com"
+  }
+}

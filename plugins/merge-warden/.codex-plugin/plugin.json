@@ -1,0 +1,27 @@
+{
+  "name": "merge-warden",
+  "version": "0.1.0",
+  "description": "Profile-aware GitHub PR housekeeping with fail-closed opening and merge policies.",
+  "author": {
+    "name": "SudarshanTechLabs",
+    "email": "sunny.sudarshan@gmail.com",
+    "url": "https://github.com/SUDARSHANCHAUDHARI"
+  },
+  "repository": "https://github.com/SUDARSHANCHAUDHARI/MergeWarden",
+  "license": "MIT",
+  "keywords": ["github", "pull-requests", "housekeeping", "codex", "claude-code"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MergeWarden",
+    "shortDescription": "Safely open, assess, and merge pull requests.",
+    "longDescription": "Scan profile-specific repositories, open verified pull requests, report blockers, and merge only when deterministic safety gates permit it.",
+    "developerName": "SudarshanTechLabs",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Scan my repositories and report PR housekeeping actions.",
+      "Open verified pull requests for eligible branches.",
+      "Show which pull requests are safe to merge."
+    ]
+  }
+}
