@@ -1,15 +1,18 @@
 {
   "profile": "personal",
-  "githubAccount": "SUDARSHANCHAUDHARI",
-  "gitEmail": "sunny.sudarshan@gmail.com",
-  "repositoryRoots": ["/Users/screencloudsudarshan/SUDARSHAN_CODE/sudarshan_repos"],
-  "repositoryAllowlist": [],
-  "candidateBranches": {},
-  "verificationCommands": {},
+  "githubAccount": "your-github-user",
+  "gitEmail": "you@example.com",
+  "repositoryRoots": ["/path/to/personal/repos"],
+  "repositoryAllowlist": ["your-github-user/example"],
+  "candidateBranches": { "your-github-user/example": [] },
+  "verificationCommands": { "your-github-user/example": [["npm", "test"]] },
   "autoOpenPullRequests": true,
   "autoMergeLowRisk": true,
   "requireMergeApproval": false,
   "mergeMethod": "squash",
-  "riskThreshold": 30
-  ,"requireReview": false
+  "riskThreshold": 30,
+  "requireReview": false,
+  "scheduledApply": false,
+  "deleteBranchAfterMerge": false,
+  "auditLogPath": ".mergewarden/audit.jsonl"
 }

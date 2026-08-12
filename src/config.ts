@@ -37,12 +37,35 @@ export async function loadConfig(path: string): Promise<ProfileConfig> {
     throw new Error("riskThreshold must be between 0 and 100.");
   }
 
-  const booleans = ["autoOpenPullRequests", "autoMergeLowRisk", "requireMergeApproval", "requireReview"] as const;
+  const booleans = [
+    "autoOpenPullRequests",
+    "autoMergeLowRisk",
+    "requireMergeApproval",
+    "requireReview",
+    "scheduledApply",
+    "deleteBranchAfterMerge"
+  ] as const;
   for (const key of booleans) {
     if (typeof config[key] !== "boolean") throw new Error(`${key} must be boolean.`);
   }
   if (config.profile === "work" && config.requireMergeApproval !== true) {
     throw new Error("Work profiles must require explicit merge approval.");
+  }
+  if (typeof config.auditLogPath !== "string" || config.auditLogPath.length === 0) {
+    throw new Error("auditLogPath must be a non-empty path.");
+  }
+
+  for (const [repository, branches] of Object.entries(config.candidateBranches as Record<string, unknown>)) {
+    if (!Array.isArray(branches) || !branches.every((branch) => typeof branch === "string" && branch.length > 0)) {
+      throw new Error(`candidateBranches.${repository} must be an array of non-empty branch names.`);
+    }
+  }
+  for (const [repository, commands] of Object.entries(config.verificationCommands as Record<string, unknown>)) {
+    if (!Array.isArray(commands) || !commands.every((command) =>
+      Array.isArray(command) && command.length > 0 && command.every((part) => typeof part === "string" && part.length > 0)
+    )) {
+      throw new Error(`verificationCommands.${repository} must contain non-empty argument arrays.`);
+    }
   }
 
   return config as unknown as ProfileConfig;
