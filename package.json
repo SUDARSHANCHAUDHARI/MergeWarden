@@ -1,7 +1,7 @@
 {
-  "name": "merge-warden",
+  "name": "mergewardenai",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "Profile-aware GitHub PR housekeeping for Codex and Claude Code.",
   "author": "Sudarshan Chaudhari / SudarshanTechLabs",
   "repository": {
@@ -18,7 +18,7 @@
     "node": ">=20"
   },
   "bin": {
-    "mergewarden": "dist/src/cli.js"
+    "mergewardenai": "dist/src/cli.js"
   },
   "files": ["assets/", "dist/", "plugins/", "scripts/", "scheduler/", "config/", "docs/", "README.md", "LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"],
   "scripts": {

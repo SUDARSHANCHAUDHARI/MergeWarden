@@ -65,13 +65,13 @@ explicitly requested, and blocks mutation when required evidence is unknown.
 
 | Action | Command |
 | --- | --- |
-| Verify profile and identity | `mergewarden status --config PATH` |
-| Scan all allowlisted repositories | `mergewarden scan --config PATH` |
-| Inspect one repository | `mergewarden scan --repo OWNER/REPO --config PATH` |
-| Inspect one PR | `mergewarden check --repo OWNER/REPO --pr 42 --config PATH` |
-| Preview opening a PR | `mergewarden open --repo OWNER/REPO --head BRANCH --config PATH` |
-| Open a verified PR | `mergewarden open --repo OWNER/REPO --head BRANCH --apply --config PATH` |
-| Merge one eligible PR | `mergewarden merge --repo OWNER/REPO --pr 42 --apply --config PATH` |
+| Verify profile and identity | `mergewardenai status --config PATH` |
+| Scan all allowlisted repositories | `mergewardenai scan --config PATH` |
+| Inspect one repository | `mergewardenai scan --repo OWNER/REPO --config PATH` |
+| Inspect one PR | `mergewardenai check --repo OWNER/REPO --pr 42 --config PATH` |
+| Preview opening a PR | `mergewardenai open --repo OWNER/REPO --head BRANCH --config PATH` |
+| Open a verified PR | `mergewardenai open --repo OWNER/REPO --head BRANCH --apply --config PATH` |
+| Merge one eligible PR | `mergewardenai merge --repo OWNER/REPO --pr 42 --apply --config PATH` |
 | Merge and request branch deletion | Add `--delete-branch` to the targeted merge command |
 | Approve one work merge | Add `--approve-work-merge` to the targeted merge command |
 
@@ -105,8 +105,8 @@ pnpm link --global
 Confirm the CLI is available:
 
 ```bash
-mergewarden --version
-mergewarden --help
+mergewardenai --version
+mergewardenai --help
 ```
 
 ### Install the agent adapters
