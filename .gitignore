@@ -4,3 +4,7 @@ dist-test/
 .mergewarden/
 *.log
 .env
+
+# Real MergeWarden profile configs (keep the *.example.json templates tracked)
+config/personal.json
+config/work.json
