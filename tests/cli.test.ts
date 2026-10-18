@@ -19,7 +19,7 @@ function runCli(args: string[], env: NodeJS.ProcessEnv): Promise<{ code: number 
   });
 }
 
-async function fixture(options: { scheduledApply?: boolean; deleteBranchAfterMerge?: boolean } = {}) {
+async function fixture(options: { scheduledApply?: boolean; deleteBranchAfterMerge?: boolean; headRef?: string; protectedBranch?: boolean } = {}) {
   const root = await mkdtemp(join(tmpdir(), "mergewarden-test-"));
   const bin = join(root, "bin");
   const log = join(root, "gh.log");
@@ -27,9 +27,11 @@ async function fixture(options: { scheduledApply?: boolean; deleteBranchAfterMer
   await import("node:fs/promises").then(({ mkdir }) => mkdir(bin));
   const gh = join(bin, "gh");
   await writeFile(gh, `#!/bin/sh
-if [ "$1" = "api" ]; then printf 'owner\\n'; exit 0; fi
+if [ "$1" = "api" ] && [ "$2" = "user" ]; then printf 'owner\\n'; exit 0; fi
+if [ "$1" = "api" ]; then printf '%s\\n' "$GH_PROTECTED"; exit 0; fi
+if [ "$1" = "repo" ] && [ "$2" = "view" ]; then printf 'main\\n'; exit 0; fi
 if [ "$1" = "pr" ] && [ "$2" = "view" ]; then
-  printf '%s\\n' '{"number":7,"title":"Safe","url":"https://github.com/owner/repo/pull/7","headRefOid":"abc123","isDraft":false,"mergeStateStatus":"CLEAN","reviewDecision":"","additions":5,"deletions":2,"changedFiles":1,"files":[{"path":"src/a.ts"}],"statusCheckRollup":[{"conclusion":"SUCCESS","status":"COMPLETED"}],"state":"OPEN"}'
+  printf '%s\\n' '{"number":7,"title":"Safe","url":"https://github.com/owner/repo/pull/7","headRefName":"'"$GH_HEAD_REF"'","headRefOid":"abc123","isDraft":false,"mergeStateStatus":"CLEAN","reviewDecision":"","additions":5,"deletions":2,"changedFiles":1,"files":[{"path":"src/a.ts"}],"statusCheckRollup":[{"conclusion":"SUCCESS","status":"COMPLETED"}],"state":"OPEN"}'
   exit 0
 fi
 if [ "$1" = "pr" ] && [ "$2" = "list" ]; then
@@ -59,7 +61,13 @@ exit 2
     deleteBranchAfterMerge: options.deleteBranchAfterMerge ?? false,
     auditLogPath: join(root, "audit.jsonl")
   }));
-  return { root, config, log, env: { ...process.env, PATH: `${bin}:${process.env.PATH ?? ""}`, GH_LOG: log } };
+  return { root, config, log, env: {
+    ...process.env,
+    PATH: `${bin}:${process.env.PATH ?? ""}`,
+    GH_LOG: log,
+    GH_HEAD_REF: options.headRef ?? "feature/safe",
+    GH_PROTECTED: String(options.protectedBranch ?? false)
+  } };
 }
 
 test("manual bulk scan refuses apply mode", async () => {
@@ -93,6 +101,28 @@ test("branch deletion requires an explicit flag", async () => {
   const log = await readFile(testFixture.log, "utf8");
   assert.match(log, /--delete-branch/);
 });
+
+test("deleteBranchAfterMerge config alone does not delete the branch", async () => {
+  const testFixture = await fixture({ deleteBranchAfterMerge: true });
+  const result = await runCli(["merge", "--repo", "owner/repo", "--pr", "7", "--apply", "--config", testFixture.config], testFixture.env);
+  assert.equal(result.code, 0, result.stderr);
+  assert.match(result.stdout, /branch preserved/);
+  const log = await readFile(testFixture.log, "utf8");
+  assert.doesNotMatch(log, /--delete-branch/);
+});
+
+for (const [name, options] of [
+  ["default", { headRef: "main" }],
+  ["protected", { protectedBranch: true }]
+] as const) {
+  test(`refuses to delete a ${name} branch even with --delete-branch`, async () => {
+    const testFixture = await fixture(options);
+    const result = await runCli(["merge", "--repo", "owner/repo", "--pr", "7", "--apply", "--delete-branch", "--config", testFixture.config], testFixture.env);
+    assert.equal(result.code, 1);
+    assert.match(result.stderr, /refusing to delete default or protected branch/);
+    await assert.rejects(readFile(testFixture.log, "utf8"), { code: "ENOENT" });
+  });
+}
 
 test("targeted open respects disabled configuration", async () => {
   const testFixture = await fixture();

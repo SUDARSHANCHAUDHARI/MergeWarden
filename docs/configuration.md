@@ -18,7 +18,7 @@ Configuration is JSON and should be stored outside a public repository when it n
 - `riskThreshold`: maximum deterministic score from 0 to 100.
 - `requireReview`: require GitHub `APPROVED` review state.
 - `scheduledApply`: allow the scheduled runner to mutate. Defaults to false.
-- `deleteBranchAfterMerge`: request branch deletion after merge. Defaults to false.
+- `deleteBranchAfterMerge`: does not delete branches. Deletion requires `--delete-branch` on the merge command.
 - `auditLogPath`: local JSONL mutation audit path.
 
 ## Verification commands

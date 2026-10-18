@@ -3,7 +3,9 @@ import { resolve } from "node:path";
 import { writeAudit } from "./audit.js";
 import { loadConfig } from "./config.js";
 import {
+  defaultBranch,
   getOpenPullRequest,
+  isProtectedBranch,
   listOpenPullRequests,
   mergePullRequest,
   toPullRequestState,
@@ -117,7 +119,11 @@ async function runMerge(config: ProfileConfig, options: Options): Promise<void> 
   await verifyGitHubIdentity(config.githubAccount);
   const current = await getOpenPullRequest(repository, options.pullRequest);
   if (!current || current.headRefOid !== inspected.state.headOid) throw new Error(`${repository}#${options.pullRequest}: head changed before merge.`);
-  const deleteBranch = options.deleteBranch || config.deleteBranchAfterMerge;
+  // Only the explicit flag authorizes deletion; config.deleteBranchAfterMerge never does.
+  const deleteBranch = options.deleteBranch;
+  if (deleteBranch && (current.headRefName === await defaultBranch(repository) || await isProtectedBranch(repository, current.headRefName))) {
+    throw new Error(`${repository}#${options.pullRequest}: refusing to delete default or protected branch ${current.headRefName}.`);
+  }
   try {
     await mergePullRequest(repository, options.pullRequest, config.mergeMethod, deleteBranch);
     await writeAudit(config.auditLogPath, auditRecord(config, {

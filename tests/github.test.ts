@@ -26,6 +26,7 @@ const pullRequest: GitHubPullRequest = {
   number: 1,
   title: "Change",
   url: "https://github.com/owner/repo/pull/1",
+  headRefName: "feature/change",
   headRefOid: "abc",
   isDraft: false,
   mergeStateStatus: "CLEAN",

@@ -17,6 +17,7 @@ export interface GitHubPullRequest {
   number: number;
   title: string;
   url: string;
+  headRefName: string;
   headRefOid: string;
   isDraft: boolean;
   mergeStateStatus: string;
@@ -45,14 +46,18 @@ export async function defaultBranch(repository: string): Promise<string> {
   return run("gh", ["repo", "view", repository, "--json", "defaultBranchRef", "--jq", ".defaultBranchRef.name"]);
 }
 
+export async function isProtectedBranch(repository: string, branch: string): Promise<boolean> {
+  return (await run("gh", ["api", `repos/${repository}/branches/${encodeURIComponent(branch)}`, "--jq", ".protected"])) === "true";
+}
+
 export async function listOpenPullRequests(repository: string): Promise<GitHubPullRequest[]> {
-  const fields = "number,title,url,headRefOid,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,additions,deletions,changedFiles,files";
+  const fields = "number,title,url,headRefName,headRefOid,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,additions,deletions,changedFiles,files";
   const output = await run("gh", ["pr", "list", "--repo", repository, "--state", "open", "--limit", "100", "--json", fields]);
   return JSON.parse(output) as GitHubPullRequest[];
 }
 
 export async function getOpenPullRequest(repository: string, number: number): Promise<GitHubPullRequest | undefined> {
-  const fields = "number,title,url,headRefOid,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,additions,deletions,changedFiles,files,state";
+  const fields = "number,title,url,headRefName,headRefOid,isDraft,mergeStateStatus,reviewDecision,statusCheckRollup,additions,deletions,changedFiles,files,state";
   const output = await run("gh", ["pr", "view", String(number), "--repo", repository, "--json", fields]);
   const pullRequest = JSON.parse(output) as GitHubPullRequest & { state: string };
   return pullRequest.state === "OPEN" ? pullRequest : undefined;

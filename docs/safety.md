@@ -7,7 +7,7 @@ MergeWarden follows four rules: explicit scope, deterministic evidence, dry-run 
 - `scan` is always read-only, even if `--apply` is supplied.
 - `open` requires one repository and one configured candidate branch.
 - `merge` requires one repository, one PR number, and `--apply`.
-- Source branches are preserved unless `--delete-branch` or `deleteBranchAfterMerge` explicitly requests deletion.
+- Source branches are preserved unless `--delete-branch` explicitly requests deletion. The default branch and protected branches are never deleted; the merge is refused instead.
 
 ## Scheduled behavior
 
